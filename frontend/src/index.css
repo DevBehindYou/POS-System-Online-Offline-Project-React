@@ -513,3 +513,14 @@ tbody tr:hover {
   th, td { padding: 0.7rem 0.9rem; }
 }
 
+/* Custom class to handle responsive visibility for top bar logout button */
+.nav-logout-btn {
+  display: none !important;
+}
+@media (min-width: 768px) {
+  .nav-logout-btn {
+    display: inline-flex !important;
+  }
+}
+
+

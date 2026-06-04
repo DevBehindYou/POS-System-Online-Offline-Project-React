@@ -2,9 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+
+    <!-- ── SEO & Meta ── -->
+    <title>POS System — Point of Sale</title>
+    <meta name="description" content="Modern Point of Sale system with real-time inventory, sales tracking, and customer management." />
+    <meta name="theme-color" content="#4f46e5" />
+
+    <!-- ── Open Graph ── -->
+    <meta property="og:title" content="POS System" />
+    <meta property="og:description" content="Modern Point of Sale system" />
+    <meta property="og:type" content="website" />
+
+    <!-- ── Favicon ── -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- ── Prevent FOUC: apply saved theme class before React mounts ── -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('pos-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

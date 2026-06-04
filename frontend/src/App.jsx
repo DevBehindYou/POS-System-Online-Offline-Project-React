@@ -13,6 +13,7 @@ import {
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import ServerStatusBadge from './components/common/ServerStatusBadge';
 
 import Login from './pages/auth/Login';
 import Dashboard from './pages/dashboard/Dashboard';
@@ -173,12 +174,13 @@ function AppShell() {
               </span>
             </div>
 
-            {/* Desktop Nav Links — visible only at lg (1024px+) */}
-            <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '0.25rem', flex: 1, justifyContent: 'center' }}>
+            {/* Desktop Nav Links — visible on tablet & desktop (768px+) */}
+            <div className="hidden md:flex" style={{ alignItems: 'center', gap: '0.25rem', flex: 1, justifyContent: 'center' }}>
               {visibleNav.map((item) => (
                 <NavLink
                   key={item.href}
                   to={item.href}
+                  title={item.name}
                   style={({ isActive }) => ({
                     display: 'flex',
                     alignItems: 'center',
@@ -207,29 +209,35 @@ function AppShell() {
                   }}
                 >
                   {item.icon}
-                  <span>{item.name}</span>
+                  <span className="hidden lg:inline">{item.name}</span>
                 </NavLink>
               ))}
             </div>
 
             {/* Right controls */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+              {/* Server Status */}
+              <ServerStatusBadge />
+
               {/* Theme Toggle */}
               <ThemeToggle />
 
-              {/* User avatar + name — visible only at lg (1024px+) */}
-              <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
-                <div style={{
-                  width: '2rem', height: '2rem',
-                  borderRadius: '50%',
-                  backgroundColor: user?.role === 'admin' ? 'var(--color-primary)' : '#10b981',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', fontWeight: 700, fontSize: '0.8125rem',
-                  flexShrink: 0,
-                }}>
+              {/* User avatar + name — visible on tablet & desktop (768px+) */}
+              <div className="hidden md:flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
+                <div 
+                  title={user?.name || user?.username}
+                  style={{
+                    width: '2rem', height: '2rem',
+                    borderRadius: '50%',
+                    backgroundColor: user?.role === 'admin' ? 'var(--color-primary)' : '#10b981',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontWeight: 700, fontSize: '0.8125rem',
+                    flexShrink: 0,
+                  }}
+                >
                   {userInitial}
                 </div>
-                <div style={{ lineHeight: 1.2 }}>
+                <div className="hidden lg:block" style={{ lineHeight: 1.2 }}>
                   <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--nav-text)' }}>
                     {user?.name || user?.username}
                   </div>
@@ -239,25 +247,26 @@ function AppShell() {
                 </div>
               </div>
 
-              {/* Logout button — visible only at lg (1024px+) */}
+              {/* Logout button — visible on tablet & desktop (768px+) */}
               <button
                 id="logout-btn"
                 onClick={logout}
-                className="hidden lg:inline-flex pos-btn pos-btn-danger"
+                title="Logout"
+                className="nav-logout-btn pos-btn pos-btn-danger"
                 style={{ padding: '0.375rem 0.875rem', fontSize: '0.8125rem' }}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                 </svg>
-                Logout
+                <span className="hidden lg:inline">Logout</span>
               </button>
 
-              {/* Hamburger — shown on mobile & tablet (< 1024px)
-                  NOTE: NO display:'flex' in style — let Tailwind's lg:hidden control visibility */}
+              {/* Hamburger — shown only on mobile (< 768px)
+                  NOTE: NO display:'flex' in style — let Tailwind's md:hidden control visibility */}
               <button
                 id="mobile-menu-btn"
                 onClick={() => setMobileMenuOpen((o) => !o)}
-                className="lg:hidden"
+                className="md:hidden"
                 aria-label="Toggle menu"
                 style={{
                   padding: '0.4rem',
@@ -279,6 +288,7 @@ function AppShell() {
         {/* Mobile dropdown menu */}
         {mobileMenuOpen && (
           <div
+            className="md:hidden"
             style={{
               borderTop: '1px solid var(--color-border)',
               backgroundColor: 'var(--nav-bg)',
